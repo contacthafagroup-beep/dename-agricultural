@@ -59,6 +59,10 @@
   html {
     scroll-behavior: smooth;
   }
+  /* Ensure pointer cursor on all interactive elements */
+  a, button, [role="button"], label[for] {
+    cursor: pointer;
+  }
 }
 
 @layer utilities {
