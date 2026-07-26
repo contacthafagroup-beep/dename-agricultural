@@ -58,6 +58,8 @@
   }
   html {
     scroll-behavior: smooth;
+    /* Force light mode — ignore device dark mode preference */
+    color-scheme: light;
   }
   /* Ensure pointer cursor on all interactive elements */
   a, button, [role="button"], label[for] {
