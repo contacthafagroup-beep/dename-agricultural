@@ -1,5 +1,30 @@
 @import "tailwindcss";
 
+/* ── Force light mode — disable all dark mode completely ── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: 0 0% 97%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 123 68% 23%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 38 64% 51%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 38 64% 51%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 89%;
+    --input: 0 0% 89%;
+    --ring: 123 68% 23%;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 97%;
@@ -24,26 +49,27 @@
     --radius: 0.75rem;
   }
 
+  /* Dark class intentionally uses same light values — no dark mode */
   .dark {
-    --background: 0 0% 8%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 12%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 12%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 123 50% 40%;
+    --background: 0 0% 97%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 123 68% 23%;
     --primary-foreground: 0 0% 100%;
     --secondary: 38 64% 51%;
     --secondary-foreground: 0 0% 10%;
-    --muted: 0 0% 18%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 45%;
     --accent: 38 64% 51%;
     --accent-foreground: 0 0% 10%;
-    --destructive: 0 72% 51%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 123 50% 40%;
+    --border: 0 0% 89%;
+    --input: 0 0% 89%;
+    --ring: 123 68% 23%;
   }
 }
 
@@ -51,17 +77,16 @@
   * {
     border-color: hsl(var(--border));
   }
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light only;
+    background-color: #F7F7F5;
+  }
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     font-family: 'Poppins', sans-serif;
   }
-  html {
-    scroll-behavior: smooth;
-    /* Force light mode — ignore device dark mode preference */
-    color-scheme: light;
-  }
-  /* Ensure pointer cursor on all interactive elements */
   a, button, [role="button"], label[for] {
     cursor: pointer;
   }
