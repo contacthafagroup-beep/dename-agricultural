@@ -8,7 +8,6 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 
 export default function LoginPage() {
@@ -17,17 +16,20 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
       setIsLoading(false);
-      if (error) {
-        console.error("Login error:", error);
-        toast.error(error.message || "Sign in failed. Check your credentials.");
+      if (!res.ok) {
+        toast.error(data.error || "Sign in failed. Check your credentials.");
         return;
       }
       toast.success("Signed in successfully");
@@ -35,8 +37,7 @@ export default function LoginPage() {
       router.refresh();
     } catch (err) {
       setIsLoading(false);
-      console.error("Login catch:", err);
-      toast.error("Connection error. Check your internet and try again.");
+      toast.error("Connection error. Please try again.");
     }
   };
 

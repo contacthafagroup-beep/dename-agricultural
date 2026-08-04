@@ -8,7 +8,6 @@ import { Eye, EyeOff, Loader2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 
 export default function RegisterPage() {
@@ -19,9 +18,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const supabase = createClient();
-
-  const upd = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
+    const upd = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,32 +26,28 @@ export default function RegisterPage() {
     if (form.password !== form.confirmPassword) { toast.error("Passwords do not match"); return; }
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email: form.email,
-        password: form.password,
-        options: {
-          data: {
-            full_name: form.fullName,
-            company_name: form.companyName,
-            phone: form.phone,
-            country: form.country,
-            role: "exporter",
-          },
-        },
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+          fullName: form.fullName,
+          companyName: form.companyName,
+          phone: form.phone,
+          country: form.country,
+        }),
       });
+      const data = await res.json();
       setIsLoading(false);
-      if (error) {
-        console.error("Registration error:", error);
-        toast.error(error.message || "Registration failed. Please try again.");
+      if (!res.ok) {
+        toast.error(data.error || "Registration failed. Please try again.");
         return;
       }
-      if (data?.user) {
-        setSuccess(true);
-      }
+      setSuccess(true);
     } catch (err) {
       setIsLoading(false);
-      console.error("Registration catch:", err);
-      toast.error("Connection error. Check your internet and try again.");
+      toast.error("Connection error. Please try again.");
     }
   };
 
