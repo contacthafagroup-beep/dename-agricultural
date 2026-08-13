@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,14 +22,20 @@ export default function RegisterPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const [checking, setChecking] = useState(true);
   const supabase = createClient();
 
   // If already logged in, redirect away
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) router.replace("/dashboard");
-    });
+    async function check() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        window.location.href = "/dashboard";
+      } else {
+        setChecking(false);
+      }
+    }
+    check();
   }, []);
 
   const upd = (k: string, v: string) => setForm((p) => ({ ...p, [k]: v }));
@@ -40,6 +45,7 @@ export default function RegisterPage() {
 
     if (!form.fullName.trim()) { toast.error("Full name is required"); return; }
     if (!form.companyName.trim()) { toast.error("Company name is required"); return; }
+    if (!form.email.trim()) { toast.error("Email is required"); return; }
     if (form.password.length < 6) { toast.error("Password must be at least 6 characters"); return; }
     if (form.password !== form.confirmPassword) { toast.error("Passwords do not match"); return; }
 
@@ -50,12 +56,12 @@ export default function RegisterPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: form.email,
+          email: form.email.trim(),
           password: form.password,
-          fullName: form.fullName,
-          companyName: form.companyName,
-          phone: form.phone,
-          country: form.country,
+          fullName: form.fullName.trim(),
+          companyName: form.companyName.trim(),
+          phone: form.phone.trim(),
+          country: form.country.trim(),
         }),
       });
 
@@ -68,7 +74,7 @@ export default function RegisterPage() {
       }
 
       if (data.auto_login && data.access_token && data.refresh_token) {
-        // Set session in browser — this is what makes the navbar update
+        // Set session in singleton browser client — fires onAuthStateChange in navbar
         const { error: sessionError } = await supabase.auth.setSession({
           access_token: data.access_token,
           refresh_token: data.refresh_token,
@@ -76,25 +82,32 @@ export default function RegisterPage() {
 
         if (sessionError) {
           console.error("setSession error:", sessionError.message);
-          // Session failed but user exists — send to login
           toast.success("Account created! Please sign in.");
-          router.push("/auth/login");
+          window.location.href = "/auth/login";
           return;
         }
 
-        toast.success("Welcome to Dename! Account created successfully.");
-        router.push("/dashboard");
-        router.refresh();
+        toast.success("Welcome to Dename! ወደ ዴናሜ እንኳን ደህና መጡ!");
+        // Hard navigation — forces full page reload with session cookies set
+        window.location.href = "/dashboard";
       } else {
-        // Fallback: auto-login failed, send to login page
-        toast.success("Account created! Please sign in.");
-        router.push("/auth/login");
+        // Auto-login failed but user was created
+        toast.success("Account created! Please sign in. · ሂሳቡ ተከፈተ! ይግቡ።");
+        window.location.href = "/auth/login";
       }
     } catch {
       toast.error("Connection error. Please try again.");
       setIsLoading(false);
     }
   };
+
+  if (checking) {
+    return (
+      <div className="flex items-center justify-center min-h-[300px]">
+        <Loader2 className="w-6 h-6 animate-spin text-[#1B5E20]" />
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -112,7 +125,7 @@ export default function RegisterPage() {
         </p>
       </div>
 
-      <form onSubmit={handleRegister} className="space-y-4">
+      <form onSubmit={handleRegister} className="space-y-4" autoComplete="off">
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -124,6 +137,7 @@ export default function RegisterPage() {
               value={form.fullName}
               onChange={(e) => upd("fullName", e.target.value)}
               required
+              autoComplete="name"
               disabled={isLoading}
             />
           </div>
@@ -137,6 +151,7 @@ export default function RegisterPage() {
               value={form.companyName}
               onChange={(e) => upd("companyName", e.target.value)}
               required
+              autoComplete="organization"
               disabled={isLoading}
             />
           </div>
@@ -153,6 +168,7 @@ export default function RegisterPage() {
             value={form.email}
             onChange={(e) => upd("email", e.target.value)}
             required
+            autoComplete="username"
             disabled={isLoading}
           />
         </div>
@@ -167,6 +183,7 @@ export default function RegisterPage() {
               className="mt-1.5"
               value={form.phone}
               onChange={(e) => upd("phone", e.target.value)}
+              autoComplete="tel"
               disabled={isLoading}
             />
           </div>
@@ -179,6 +196,7 @@ export default function RegisterPage() {
               className="mt-1.5"
               value={form.country}
               onChange={(e) => upd("country", e.target.value)}
+              autoComplete="country-name"
               disabled={isLoading}
             />
           </div>
@@ -195,6 +213,7 @@ export default function RegisterPage() {
               value={form.password}
               onChange={(e) => upd("password", e.target.value)}
               required
+              autoComplete="new-password"
               disabled={isLoading}
             />
             <button
@@ -218,6 +237,7 @@ export default function RegisterPage() {
             value={form.confirmPassword}
             onChange={(e) => upd("confirmPassword", e.target.value)}
             required
+            autoComplete="new-password"
             disabled={isLoading}
           />
         </div>

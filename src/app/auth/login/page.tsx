@@ -16,25 +16,36 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
   const router = useRouter();
   const supabase = createClient();
 
-  // If already logged in, redirect away
+  // If already logged in, redirect away immediately
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) router.replace("/dashboard");
-    });
+    async function check() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        window.location.href = "/dashboard";
+      } else {
+        setChecking(false);
+      }
+    }
+    check();
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      toast.error("Enter your email and password");
+      return;
+    }
     setIsLoading(true);
 
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.trim(), password }),
       });
 
       const data = await res.json();
@@ -45,7 +56,7 @@ export default function LoginPage() {
         return;
       }
 
-      // Store session in browser cookies
+      // Store session in browser — singleton client fires onAuthStateChange in navbar
       const { error: sessionError } = await supabase.auth.setSession({
         access_token: data.access_token,
         refresh_token: data.refresh_token,
@@ -59,18 +70,26 @@ export default function LoginPage() {
 
       toast.success("Signed in successfully! · ስኬታማ ግቤት");
 
-      // Redirect based on role
+      // Hard navigation so middleware re-reads cookies and navbar re-renders fresh
       if (data.role === "admin") {
-        router.push("/admin");
+        window.location.href = "/admin";
       } else {
-        router.push("/dashboard");
+        window.location.href = "/dashboard";
       }
-      router.refresh();
     } catch {
       toast.error("Connection error. Please try again.");
       setIsLoading(false);
     }
   };
+
+  // Show nothing while checking existing session to prevent flash
+  if (checking) {
+    return (
+      <div className="flex items-center justify-center min-h-[300px]">
+        <Loader2 className="w-6 h-6 animate-spin text-[#1B5E20]" />
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -86,7 +105,7 @@ export default function LoginPage() {
         <p className="text-xs text-[#D89C2B] font-medium mt-1">ይግቡ</p>
       </div>
 
-      <form onSubmit={handleLogin} className="space-y-5">
+      <form onSubmit={handleLogin} className="space-y-5" autoComplete="off">
         <div>
           <Label
             htmlFor="email"
@@ -102,7 +121,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            autoComplete="email"
+            autoComplete="username"
             disabled={isLoading}
           />
         </div>

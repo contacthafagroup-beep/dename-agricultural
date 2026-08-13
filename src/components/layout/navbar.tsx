@@ -67,10 +67,12 @@ export function Navbar() {
       }
     }
     getUser();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) { setUser(null); setAccountOpen(false); }
-      else getUser();
-    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event: import("@supabase/supabase-js").AuthChangeEvent, session: import("@supabase/supabase-js").Session | null) => {
+        if (!session) { setUser(null); setAccountOpen(false); }
+        else getUser();
+      }
+    );
     return () => subscription.unsubscribe();
   }, []);
 
