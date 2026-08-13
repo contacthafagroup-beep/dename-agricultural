@@ -32,16 +32,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Use service-role admin client — bypasses RLS and trigger issues
+    // Admin client — bypasses RLS and trigger issues
     const adminClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
+      auth: { autoRefreshToken: false, persistSession: false },
     });
 
-    // Step 1: Create auth user using admin API
-    // email_confirm: true skips the email confirmation requirement
+    // Step 1: Create auth user — email_confirm:true skips verification email
     const { data: createdUser, error: createError } =
       await adminClient.auth.admin.createUser({
         email,
@@ -53,18 +49,12 @@ export async function POST(request: NextRequest) {
         },
       });
 
-    console.log(
-      "Admin createUser result:",
-      createError ? createError.message : "OK",
-      createdUser?.user?.id ?? "no-id"
-    );
-
     if (createError) {
-      // Handle "already registered" gracefully
+      const msg = createError.message?.toLowerCase() ?? "";
       if (
-        createError.message?.toLowerCase().includes("already registered") ||
-        createError.message?.toLowerCase().includes("already been registered") ||
-        createError.message?.toLowerCase().includes("user already exists")
+        msg.includes("already registered") ||
+        msg.includes("already been registered") ||
+        msg.includes("user already exists")
       ) {
         return NextResponse.json(
           { error: "This email is already registered. Please sign in." },
@@ -82,13 +72,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Step 2: Insert profile using service-role (bypasses RLS completely)
+    // Step 2: Insert profile with service-role (bypasses RLS completely)
     const { error: profileError } = await adminClient
       .from("profiles")
       .upsert(
         {
           id: userId,
-          email: email,
+          email,
           full_name: fullName || "",
           company_name: companyName || "",
           phone: phone || "",
@@ -99,14 +89,32 @@ export async function POST(request: NextRequest) {
       );
 
     if (profileError) {
-      console.error("Profile insert error:", profileError.message);
-      // Non-fatal — user exists in auth, profile can be created on first login
+      console.error("Profile insert error (non-fatal):", profileError.message);
+    }
+
+    // Step 3: Auto sign-in — return session tokens so client can setSession()
+    const anonClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+
+    const { data: signInData, error: signInError } =
+      await anonClient.auth.signInWithPassword({ email, password });
+
+    if (signInError || !signInData.session) {
+      // User was created but auto-login failed — still success, just needs to log in manually
+      return NextResponse.json({
+        success: true,
+        auto_login: false,
+        message: "Account created! Please sign in.",
+      });
     }
 
     return NextResponse.json({
       success: true,
-      message:
-        "Account created successfully! You can now sign in.",
+      auto_login: true,
+      access_token: signInData.session.access_token,
+      refresh_token: signInData.session.refresh_token,
+      role: "exporter",
     });
   } catch (err) {
     console.error("Register API error:", err);

@@ -17,7 +17,6 @@ export async function updateSession(request: NextRequest) {
     !supabaseKey.includes("placeholder");
 
   if (!isConfigured) {
-    // Supabase not set up yet — allow all pages to load for preview
     return supabaseResponse;
   }
 
@@ -46,21 +45,58 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse;
   }
 
-  const isDashboardRoute = request.nextUrl.pathname.startsWith("/dashboard");
-  const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
+  const { pathname } = request.nextUrl;
+  const isDashboardRoute = pathname.startsWith("/dashboard");
+  const isAdminRoute = pathname.startsWith("/admin");
   const isAuthRoute =
-    request.nextUrl.pathname.startsWith("/auth") &&
-    !request.nextUrl.pathname.startsWith("/auth/callback");
+    pathname.startsWith("/auth/login") ||
+    pathname.startsWith("/auth/register");
 
+  // ── Not logged in trying to access protected pages ──
   if ((isDashboardRoute || isAdminRoute) && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
+    url.searchParams.set("from", pathname);
     return NextResponse.redirect(url);
   }
 
+  // ── Logged in — check role for admin routes ──
+  if (isAdminRoute && user) {
+    let role = "exporter";
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+      role = profile?.role ?? "exporter";
+    } catch {
+      // profile fetch failed — treat as non-admin
+    }
+
+    if (role !== "admin") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
+  }
+
+  // ── Already logged in trying to visit login/register ──
   if (isAuthRoute && user) {
+    let role = "exporter";
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+      role = profile?.role ?? "exporter";
+    } catch {
+      // ignore
+    }
+
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = role === "admin" ? "/admin" : "/dashboard";
     return NextResponse.redirect(url);
   }
 
