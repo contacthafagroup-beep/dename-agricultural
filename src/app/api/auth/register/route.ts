@@ -25,6 +25,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!fullName || !fullName.trim()) {
+      return NextResponse.json(
+        { error: "Full name is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!companyName || !companyName.trim()) {
+      return NextResponse.json(
+        { error: "Company name is required" },
+        { status: 400 }
+      );
+    }
+
     if (password.length < 6) {
       return NextResponse.json(
         { error: "Password must be at least 6 characters" },

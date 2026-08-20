@@ -21,6 +21,7 @@ export default function RegisterPage() {
     confirmPassword: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [checking, setChecking] = useState(true);
   const supabase = createClient();
@@ -230,16 +231,24 @@ export default function RegisterPage() {
           <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Confirm Password *
           </Label>
-          <Input
-            type="password"
-            placeholder="Repeat password"
-            className="mt-1.5"
-            value={form.confirmPassword}
-            onChange={(e) => upd("confirmPassword", e.target.value)}
-            required
-            autoComplete="new-password"
-            disabled={isLoading}
-          />
+          <div className="relative mt-1.5">
+            <Input
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Repeat password"
+              value={form.confirmPassword}
+              onChange={(e) => upd("confirmPassword", e.target.value)}
+              required
+              autoComplete="new-password"
+              disabled={isLoading}
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
 
         <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
