@@ -90,7 +90,7 @@ export function HeroSection() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.6, ease: "easeInOut" }}
-          className="absolute inset-0 z-0">
+          className="absolute inset-0 z-0 pointer-events-none">
           <div className="w-full h-full bg-cover bg-center"
             style={{ backgroundImage: `url('${s.image}')` }} />
           {/* Multi-layer overlays for depth and readability */}
