@@ -293,16 +293,12 @@ export function Navbar() {
             ) : (
               /* ── NOT SIGNED IN ── */
               <>
-                <Link href="/auth/login">
-                  <Button variant={isTransparent ? "white" : "outline"} size="sm">
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/auth/register">
-                  <Button variant={isTransparent ? "secondary" : "default"} size="sm">
-                    Register
-                  </Button>
-                </Link>
+                <Button asChild variant={isTransparent ? "white" : "outline"} size="sm">
+                  <Link href="/auth/login">Sign In</Link>
+                </Button>
+                <Button asChild variant={isTransparent ? "secondary" : "default"} size="sm">
+                  <Link href="/auth/register">Register</Link>
+                </Button>
               </>
             )}
           </div>
@@ -389,12 +385,12 @@ export function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Link href="/auth/login" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full">Sign In</Button>
-                    </Link>
-                    <Link href="/auth/register" onClick={() => setIsOpen(false)}>
-                      <Button className="w-full">Register as a Buyer</Button>
-                    </Link>
+                    <Button asChild variant="outline" className="w-full">
+                      <Link href="/auth/login" onClick={() => setIsOpen(false)}>Sign In</Link>
+                    </Button>
+                    <Button asChild className="w-full">
+                      <Link href="/auth/register" onClick={() => setIsOpen(false)}>Register as a Buyer</Link>
+                    </Button>
                   </>
                 )}
               </div>
