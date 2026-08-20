@@ -214,11 +214,9 @@ export default function ProductsPage() {
                 sesame, avocado, moringa, chili, pulses, and more available on enquiry.
               </p>
             </div>
-            <Link href="/contact" className="shrink-0">
-              <Button className="whitespace-nowrap">
-                Contact Us <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
+            <Button asChild className="whitespace-nowrap">
+              <Link href="/contact">Contact Us <ArrowRight className="w-4 h-4" /></Link>
+            </Button>
           </motion.div>
         </div>
       </section>

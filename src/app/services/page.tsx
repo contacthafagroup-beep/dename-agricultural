@@ -222,12 +222,9 @@ export default function ServicesPage() {
                   <p className="text-muted-foreground leading-relaxed mb-6">
                     {service.description}
                   </p>
-                  <Link href="/contact">
-                    <Button>
-                      Get a Quote
-                      <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </Link>
+                  <Button asChild>
+                    <Link href="/contact">Get a Quote <ArrowRight className="w-4 h-4" /></Link>
+                  </Button>
                 </div>
 
                 <div className={`${index % 2 === 1 ? "lg:order-1" : ""} bg-white dark:bg-gray-900 rounded-2xl p-6 border border-border`}>
@@ -265,12 +262,12 @@ export default function ServicesPage() {
               to purchase our agricultural products.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/products">
-                <Button size="lg">Browse Products</Button>
-              </Link>
-              <Link href="/contact">
-                <Button size="lg" variant="outline">Contact Us</Button>
-              </Link>
+              <Button asChild size="lg">
+                <Link href="/products">Browse Products</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link href="/contact">Contact Us</Link>
+              </Button>
             </div>
           </motion.div>
         </div>

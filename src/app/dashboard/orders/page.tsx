@@ -84,9 +84,9 @@ export default function OrdersPage() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">My Orders from Dename</h1>
           <p className="text-muted-foreground text-sm mt-0.5">{orders.length} orders placed with Dename</p>
         </div>
-        <Link href="/products">
-          <Button><Package className="w-4 h-4" /> Order New Product</Button>
-        </Link>
+        <Button asChild>
+          <Link href="/products"><Package className="w-4 h-4" /> Order New Product</Link>
+        </Button>
       </div>
 
       {/* Filters */}
@@ -115,7 +115,7 @@ export default function OrdersPage() {
           <p className="text-muted-foreground text-sm mb-6">
             {orders.length === 0 ? "You haven't ordered from Dename yet." : "No orders match your filters."}
           </p>
-          <Link href="/products"><Button>Browse Products</Button></Link>
+          <Button asChild><Link href="/products">Browse Products</Link></Button>
         </div>
       ) : (
         <div className="space-y-4">
@@ -139,11 +139,9 @@ export default function OrdersPage() {
                     Placed: {formatDate(order.created_at)} · Destination: {order.delivery_destination}
                   </p>
                 </div>
-                <Link href={`/dashboard/orders/${order.id}`}>
-                  <Button variant="outline" size="sm">
-                    View Details <ArrowRight className="w-3 h-3" />
-                  </Button>
-                </Link>
+                <Button asChild variant="outline" size="sm">
+                  <Link href={`/dashboard/orders/${order.id}`}>View Details <ArrowRight className="w-3 h-3" /></Link>
+                </Button>
               </div>
               <OrderTimeline status={order.status} />
             </motion.div>

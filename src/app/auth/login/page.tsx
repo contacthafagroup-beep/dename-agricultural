@@ -25,7 +25,7 @@ export default function LoginPage() {
     async function check() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        window.location.href = "/dashboard";
+        router.replace("/dashboard");
       } else {
         setChecking(false);
       }
@@ -70,11 +70,10 @@ export default function LoginPage() {
 
       toast.success("Signed in successfully! · ስኬታማ ግቤት");
 
-      // Hard navigation so middleware re-reads cookies and navbar re-renders fresh
       if (data.role === "admin") {
-        window.location.href = "/admin";
+        router.push("/admin");
       } else {
-        window.location.href = "/dashboard";
+        router.push("/dashboard");
       }
     } catch {
       toast.error("Connection error. Please try again.");

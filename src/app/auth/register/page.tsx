@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [checking, setChecking] = useState(true);
+  const router = useRouter();
   const supabase = createClient();
 
   // If already logged in, redirect away
@@ -31,7 +33,7 @@ export default function RegisterPage() {
     async function check() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        window.location.href = "/dashboard";
+        router.replace("/dashboard");
       } else {
         setChecking(false);
       }
@@ -84,17 +86,16 @@ export default function RegisterPage() {
         if (sessionError) {
           console.error("setSession error:", sessionError.message);
           toast.success("Account created! Please sign in.");
-          window.location.href = "/auth/login";
+          router.push("/auth/login");
           return;
         }
 
         toast.success("Welcome to Dename! ወደ ዴናሜ እንኳን ደህና መጡ!");
-        // Hard navigation — forces full page reload with session cookies set
-        window.location.href = "/dashboard";
+        router.push("/dashboard");
       } else {
         // Auto-login failed but user was created
         toast.success("Account created! Please sign in. · ሂሳቡ ተከፈተ! ይግቡ።");
-        window.location.href = "/auth/login";
+        router.push("/auth/login");
       }
     } catch {
       toast.error("Connection error. Please try again.");

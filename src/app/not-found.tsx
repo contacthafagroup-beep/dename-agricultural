@@ -15,12 +15,12 @@ export default function NotFound() {
         The page you&apos;re looking for doesn&apos;t exist or has been moved.
       </p>
       <div className="flex gap-3">
-        <Link href="/">
-          <Button>Go Home</Button>
-        </Link>
-        <Link href="/products">
-          <Button variant="outline">Browse Products</Button>
-        </Link>
+        <Button asChild>
+          <Link href="/">Go Home</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/products">Browse Products</Link>
+        </Button>
       </div>
     </div>
   );

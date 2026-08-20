@@ -44,9 +44,9 @@ export function FeaturedProducts() {
               Available for Order Now
             </h2>
           </div>
-          <Link href="/products">
-            <Button variant="outline" className="shrink-0">All Products <ArrowRight className="w-4 h-4" /></Button>
-          </Link>
+          <Button asChild variant="outline" className="shrink-0">
+            <Link href="/products">All Products <ArrowRight className="w-4 h-4" /></Link>
+          </Button>
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -100,9 +100,9 @@ export function FeaturedProducts() {
                     <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Available</p>
                     <p className="text-base font-bold text-[#1B5E20]">{p.available_quantity} {p.unit}</p>
                   </div>
-                  <Link href={`/products/${p.categorySlug}`}>
-                    <Button size="sm" className="h-8 text-xs">Order <ArrowRight className="w-3 h-3" /></Button>
-                  </Link>
+                  <Button asChild size="sm" className="h-8 text-xs">
+                    <Link href={`/products/${p.categorySlug}`}>Order <ArrowRight className="w-3 h-3" /></Link>
+                  </Button>
                 </div>
               </div>
             </motion.div>

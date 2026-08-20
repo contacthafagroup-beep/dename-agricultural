@@ -58,14 +58,12 @@ export default function DashboardPage() {
           Browse our products and place your order — we deliver to your warehouse.
         </p>
         <div className="flex gap-3 mt-4">
-          <Link href="/products">
-            <Button variant="white" size="sm">Browse Products</Button>
-          </Link>
-          <Link href="/contact">
-            <Button size="sm" className="bg-white/20 hover:bg-white/30 text-white border border-white/30">
-              Contact Support
-            </Button>
-          </Link>
+          <Button asChild variant="white" size="sm">
+            <Link href="/products">Browse Products</Link>
+          </Button>
+          <Button asChild size="sm" className="bg-white/20 hover:bg-white/30 text-white border border-white/30">
+            <Link href="/contact">Contact Support</Link>
+          </Button>
         </div>
       </motion.div>
 
@@ -90,11 +88,9 @@ export default function DashboardPage() {
         className="bg-white dark:bg-gray-900 rounded-2xl border border-border overflow-hidden">
         <div className="flex items-center justify-between p-6 border-b border-border">
           <h3 className="font-bold text-gray-900 dark:text-white">Recent Orders</h3>
-          <Link href="/dashboard/orders">
-            <Button variant="ghost" size="sm" className="text-[#1B5E20]">
-              View All <ArrowRight className="w-4 h-4" />
-            </Button>
-          </Link>
+          <Button asChild variant="ghost" size="sm" className="text-[#1B5E20]">
+            <Link href="/dashboard/orders">View All <ArrowRight className="w-4 h-4" /></Link>
+          </Button>
         </div>
 
         {orders.length === 0 ? (

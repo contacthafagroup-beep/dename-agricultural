@@ -122,9 +122,9 @@ export default function AdminOrdersPage() {
                   </td>
                   <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{formatDate(order.created_at)}</td>
                   <td className="px-4 py-3">
-                    <Link href={`/admin/orders/${order.id}`}>
-                      <Button variant="ghost" size="sm" className="h-7 w-7 p-0"><Eye className="w-3.5 h-3.5" /></Button>
-                    </Link>
+                    <Button asChild variant="ghost" size="sm" className="h-7 w-7 p-0">
+                      <Link href={`/admin/orders/${order.id}`}><Eye className="w-3.5 h-3.5" /></Link>
+                    </Button>
                   </td>
                 </tr>
               ))}

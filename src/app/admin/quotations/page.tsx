@@ -86,11 +86,11 @@ export default function AdminQuotationsPage() {
                     </td>
                     <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{formatDate(q.created_at)}</td>
                     <td className="px-4 py-3">
-                      <Link href={`/admin/orders/${q.order_id}`}>
-                        <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
+                      <Button asChild variant="ghost" size="sm" className="h-7 w-7 p-0">
+                        <Link href={`/admin/orders/${q.order_id}`}>
                           <Eye className="w-3.5 h-3.5" />
-                        </Button>
-                      </Link>
+                        </Link>
+                      </Button>
                     </td>
                   </motion.tr>
                 ))}
