@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { WhatsAppButton } from "@/components/shared/whatsapp-button";
+import { ConditionalLayout } from "@/components/layout/conditional-layout";
 import { Toaster } from "sonner";
 
 const poppins = Poppins({
@@ -89,10 +87,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.variable} suppressHydrationWarning style={{ colorScheme: "light" }}>
       <body className={`font-[family-name:var(--font-poppins)] antialiased`} suppressHydrationWarning>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-        <WhatsAppButton />
+        <ConditionalLayout>
+          {children}
+        </ConditionalLayout>
         <Toaster richColors position="top-right" />
       </body>
     </html>
