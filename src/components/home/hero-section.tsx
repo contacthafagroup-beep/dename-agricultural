@@ -101,11 +101,11 @@ export function HeroSection() {
       </AnimatePresence>
 
       {/* ── Left accent bar ── */}
-      <div className="absolute left-0 top-0 bottom-0 w-[3px] z-20"
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] z-20 pointer-events-none"
         style={{ background: "linear-gradient(to bottom, transparent, #D89C2B 30%, #D89C2B 70%, transparent)" }} />
 
       {/* ── Top right: slide tag ── */}
-      <div className="absolute top-24 right-6 sm:right-10 z-20 text-right">
+      <div className="absolute top-24 right-6 sm:right-10 z-20 text-right pointer-events-none">
         <AnimatePresence mode="wait">
           <motion.div key={`tag-${current}`} variants={tagVariants} initial="enter" animate="show" exit="exit">
             <span className="block text-[#D89C2B] text-xs font-bold uppercase tracking-[0.2em] mb-0.5">
@@ -117,8 +117,8 @@ export function HeroSection() {
       </div>
 
       {/* ── Main content ── */}
-      <div className="relative z-10 h-full flex items-center">
-        <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-16">
+      <div className="relative z-10 h-full flex items-center pointer-events-none">
+        <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-16 pointer-events-auto">
 
           {/* Category label — top of text block */}
           <AnimatePresence mode="wait">
