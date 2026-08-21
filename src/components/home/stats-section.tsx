@@ -124,7 +124,7 @@ export function StatsSection() {
                 className="group relative bg-[#F7F7F5] dark:bg-gray-800 rounded-2xl p-6 border border-transparent hover:border-[#1B5E20]/25 hover:shadow-xl transition-all duration-300 overflow-hidden cursor-default"
               >
                 {/* Subtle background glow on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1B5E20]/0 to-[#1B5E20]/0 group-hover:from-[#1B5E20]/4 group-hover:to-[#D89C2B]/4 transition-all duration-400 rounded-2xl" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#1B5E20]/0 to-[#1B5E20]/0 group-hover:from-[#1B5E20]/4 group-hover:to-[#D89C2B]/4 transition-all duration-400 rounded-2xl pointer-events-none" />
 
                 {/* Top row: icon + number */}
                 <div className="flex items-start justify-between mb-4 relative z-10">

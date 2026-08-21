@@ -59,9 +59,9 @@ export function FeaturedProducts() {
 
               {/* Image */}
               <div className="relative h-48 overflow-hidden">
-                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-600 group-hover:scale-110"
+                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-600 group-hover:scale-110 pointer-events-none"
                   style={{ backgroundImage: `url('${p.image}')` }} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
                 {/* Status */}
                 <div className="absolute top-3 right-3">
                   <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getStatusColor(p.status)}`}>

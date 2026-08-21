@@ -63,9 +63,9 @@ export function WhyChooseUs() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}
           className="relative rounded-3xl overflow-hidden">
-          <div className="absolute inset-0 bg-cover bg-center"
+          <div className="absolute inset-0 bg-cover bg-center pointer-events-none"
             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2000&auto=format&fit=crop')" }} />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1B5E20]/95 via-[#1B5E20]/85 to-[#1B5E20]/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1B5E20]/95 via-[#1B5E20]/85 to-[#1B5E20]/60 pointer-events-none" />
 
           <div className="relative z-10 p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-white max-w-xl">

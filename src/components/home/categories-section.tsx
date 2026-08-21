@@ -68,11 +68,11 @@ export function CategoriesSection() {
                 <Link href={`/products/${cat.slug}`}>
                   <div className={`relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-400 ${isLarge ? "h-64" : "h-48"}`}>
                     {/* Background image */}
-                    <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-108"
+                    <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-108 pointer-events-none"
                       style={{ backgroundImage: `url('${categoryImages[cat.slug]}')` }} />
 
                     {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent group-hover:from-black/85 transition-all duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent group-hover:from-black/85 transition-all duration-300 pointer-events-none" />
 
                     {/* Top: icon + count */}
                     <div className="absolute top-3 left-3 right-3 flex items-start justify-between">

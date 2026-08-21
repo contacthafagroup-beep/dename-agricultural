@@ -144,9 +144,9 @@ export function TestimonialsSection() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}
           className="relative rounded-3xl overflow-hidden">
-          <div className="absolute inset-0 bg-cover bg-center"
+          <div className="absolute inset-0 bg-cover bg-center pointer-events-none"
             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop')" }} />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1B5E20]/95 via-[#1B5E20]/85 to-[#1B5E20]/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1B5E20]/95 via-[#1B5E20]/85 to-[#1B5E20]/70 pointer-events-none" />
           <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-white">
               <div className="flex items-center gap-2 mb-3">
